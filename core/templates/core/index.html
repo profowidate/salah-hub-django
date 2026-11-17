@@ -1,0 +1,101 @@
+{% load static %}<!doctype html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e1a38">
+<title>Salah Hub – مواقيت الصلاة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'core/css/app.css' %}">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="mark">☪</span><div><h1 data-i18n="title">Salah Hub</h1><small id="hijriNow"></small></div></div>
+  <nav class="tabs" id="tabs">
+    <button data-tab="prayer" class="on"><i>🕌</i><span data-i18n="tPrayer">Prayer Times</span></button>
+    <button data-tab="qibla"><i>🧭</i><span data-i18n="tQibla">Qibla</span></button>
+    <button data-tab="ramadan"><i>🌙</i><span data-i18n="tRamadan">Ramadan</span></button>
+    <button data-tab="hijri"><i>📅</i><span data-i18n="tHijri">Hijri Converter</span></button>
+  </nav>
+  <div class="tools">
+    <button class="chip" id="locChip" title="Location">📍 <span id="locText">…</span></button>
+    <button class="ico" id="langBtn" aria-label="Language">ع / EN</button>
+    <button class="ico" id="themeBtn" aria-label="Theme">◐</button>
+  </div>
+</header>
+
+<main>
+  <div id="status" class="status" hidden></div>
+
+  <section id="prayer" class="pane on">
+    <div class="hero">
+      <div class="ringwrap">
+        <svg viewBox="0 0 200 200" class="ring"><circle cx="100" cy="100" r="88" class="trk"/><circle id="arc" cx="100" cy="100" r="88" class="arc" pathLength="100"/></svg>
+        <div class="ringtxt"><small data-i18n="next">Next prayer</small><h2 id="nextName">—</h2><div id="count" class="count">--:--:--</div></div>
+      </div>
+      <div class="heroside"><p id="dateG" class="muted"></p><p id="meta" class="muted"></p></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="qibla" class="pane">
+    <div class="card qcard">
+      <div class="compass" id="compass">
+        <svg viewBox="-150 -150 300 300">
+          <g id="dial">
+            <circle r="138" class="cr"/><circle r="104" class="cr2"/>
+            <g id="ticks"></g>
+            <text y="-112" class="dn">N</text><text x="112" class="dl">E</text><text y="120" class="dl">S</text><text x="-112" class="dl">W</text>
+            <g id="kmark"><line y1="-30" y2="-104" class="kline"/><g transform="translate(0,-122)"><rect x="-13" y="-13" width="26" height="26" rx="3" class="kaaba"/><path d="M-13 -5h26" class="kgold"/></g></g>
+          </g>
+          <path d="M0 -146 l9 -16 h-18z" class="ptr" transform="translate(0,12)"/>
+          <circle r="5" class="hub"/>
+        </svg>
+      </div>
+      <div class="qinfo">
+        <div class="big" id="qDeg">—</div><p class="muted" data-i18n="bearing">Bearing from true north</p>
+        <div class="big sm" id="qDist">—</div><p class="muted" data-i18n="distance">Distance to the Kaaba</p>
+        <p id="qAlign" class="align" hidden data-i18n="aligned">You are facing the Qibla</p>
+        <button class="btn" id="compassBtn" data-i18n="enableCompass">Enable compass</button>
+        <p class="muted tiny" data-i18n="compassHelp">Hold your phone flat and turn until the Kaaba icon points to the top.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="ramadan" class="pane">
+    <div class="card"><h3 id="rTitle">—</h3><p class="muted" id="rSub"></p>
+      <div class="twrap"><table class="tbl"><thead><tr><th data-i18n="day">Day</th><th data-i18n="date">Date</th><th data-i18n="suhoor">Suhoor ends</th><th data-i18n="iftar">Iftar</th></tr></thead><tbody id="rBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="hijri" class="pane">
+    <div class="two">
+      <div class="card"><h3 data-i18n="g2h">Gregorian to Hijri</h3>
+        <label data-i18n="gDate">Gregorian date</label><input type="date" id="gIn">
+        <button class="btn" id="g2hBtn" data-i18n="convert">Convert</button><div class="res" id="g2hRes"></div></div>
+      <div class="card"><h3 data-i18n="h2g">Hijri to Gregorian</h3>
+        <div class="row3"><div><label data-i18n="dd">Day</label><input type="number" id="hD" min="1" max="30"></div>
+        <div><label data-i18n="mm">Month</label><select id="hM"></select></div>
+        <div><label data-i18n="yy">Year</label><input type="number" id="hY" min="1" max="1700"></div></div>
+        <button class="btn" id="h2gBtn" data-i18n="convert">Convert</button><div class="res" id="h2gRes"></div></div>
+    </div>
+  </section>
+</main>
+
+<aside id="drawer" class="drawer" aria-hidden="true">
+  <div class="dhead"><h3 data-i18n="settings">Location & method</h3><button class="ico" id="closeDrawer" aria-label="Close">✕</button></div>
+  <div class="seg"><button id="mAuto" data-i18n="auto">Automatic (GPS)</button><button id="mManual" data-i18n="manual">Manual</button></div>
+  <div id="autoBox"><button class="btn" id="gpsBtn" data-i18n="useGps">Use my location</button><p class="muted tiny" id="gpsInfo"></p></div>
+  <div id="manualBox"><label data-i18n="country">Country</label><select id="selCountry"></select>
+    <label data-i18n="city">City</label><select id="selCity"></select></div>
+  <label data-i18n="method">Calculation method</label>
+  <select id="selMethod"><option value="" data-i18n="methodAuto">Auto (by location)</option>
+    {% for m in methods %}<option value="{{ m.id }}" data-en="{{ m.en }}" data-ar="{{ m.ar|default:m.en }}">{{ m.en }}</option>{% endfor %}</select>
+  <label data-i18n="school">Asr calculation</label>
+  <select id="selSchool"><option value="0" data-i18n="shafi">Standard (Shafi'i, Maliki, Hanbali)</option><option value="1" data-i18n="hanafi">Hanafi</option></select>
+  <button class="btn" id="apply" data-i18n="apply">Apply</button>
+</aside>
+<div id="scrim" class="scrim"></div>
+<script src="{% static 'core/js/app.js' %}"></script>
+</body></html>
