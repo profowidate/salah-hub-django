@@ -25,6 +25,15 @@ Open http://127.0.0.1:8000
 
 ## Screenshots
 
+- Prayer Times: Fajr, Sunrise, Dhuhr, Asr, Maghrib and Isha, with a live countdown ring to the next prayer. Times follow the timezone of the selected location.
+- Automatic location: it uses the browser’s GPS coordinates and asks AlAdhan for times by coordinates. If GPS is blocked, it falls back to manual selection.
+- Manual location: a country dropdown fills a city dropdown on demand, and times come from AlAdhan’s city-based endpoint. The country and city lists come from the - free countriesnow.space service, with a small built-in list as backup.
+- Qibla: the Django backend calculates the bearing and distance to the Kaaba. The compass dial rotates with your phone’s sensor and glows when you face the Qibla.
+- Ramadan: a 30-day calendar with Suhoor end (Fajr) and Iftar (Maghrib) times, with today highlighted. It shows the next Ramadan (1448) now.
+- Hijri Converter: Gregorian to Hijri and Hijri to Gregorian.
+- Calculation Methods: all 23 AlAdhan methods, plus a Hanafi or Standard choice for Asr. The default is “Auto (by location)”.
+- Modern UI: Arabic and English with a full right-to-left layout and Arabic-Indic digits, plus dark and light themes. On mobile it has a bottom tab bar and a - - - slide-in settings panel. The design uses lapis, brass and turquoise colors with an Islamic star pattern.
+
 
 
 <img width="1907" height="876" alt="1" src="https://github.com/user-attachments/assets/80bffd19-f26d-4208-ae06-8c8c7e5c6110" />
